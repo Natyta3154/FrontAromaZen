@@ -1,30 +1,30 @@
 import axios from "axios";
 
-// 1. Definimos la base con el fallback que mencionaste
-const BASE_URL = import.meta.env.VITE_API_URL || "aromazen.up.railway.app";
+// ⚠️ Sin fallback: si no está la env, debe fallar
+const BASE_URL = import.meta.env.VITE_API_URL;
 
-// 2. Limpiamos la URL para asegurar que siempre termine en una barra "/"
-const cleanBaseUrl = BASE_URL.endsWith('/') ? BASE_URL : `${BASE_URL}/`;
+if (!BASE_URL) {
+  throw new Error("VITE_API_URL no está definida");
+}
 
-// Instancia para Productos y General
 export const api = axios.create({
-    // Usamos la base limpia + el prefijo de tu API
-    baseURL: `${cleanBaseUrl}api/productos/`, 
-    withCredentials: true,
-    headers: { "Content-Type": "application/json" },
+  baseURL: BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
-// Instancia para Usuarios
+// Auth (si lo necesitás)
 export const apiAuth = axios.create({
-    baseURL: `${cleanBaseUrl}api/usuarios/`,
-    withCredentials: true,
+  baseURL: BASE_URL,
+  withCredentials: true,
 });
 
-// Configuración de CSRF
-api.defaults.xsrfCookieName = 'csrftoken';
-api.defaults.xsrfHeaderName = 'X-CSRFToken';
-apiAuth.defaults.xsrfCookieName = 'csrftoken';
-apiAuth.defaults.xsrfHeaderName = 'X-CSRFToken';
+// CSRF (solo si usás sesión/cookies)
+api.defaults.xsrfCookieName = "csrftoken";
+api.defaults.xsrfHeaderName = "X-CSRFToken";
+apiAuth.defaults.xsrfCookieName = "csrftoken";
+apiAuth.defaults.xsrfHeaderName = "X-CSRFToken";
 
-// Exportamos la URL del Admin para tus botones
-export const ADMIN_URL = `${cleanBaseUrl}admin/`;
+// Admin
+export const ADMIN_URL = `${BASE_URL.replace(/\/api\/?$/, "")}/admin/`;

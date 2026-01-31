@@ -72,7 +72,7 @@ const Home = () => {
             <ProductSkeleton />
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {destacados.map((producto) => (
+              {Array.isArray(destacados) && destacados.map((producto) => (
                 <ProductCard
                   key={producto.id}
                   producto={producto}
@@ -80,6 +80,7 @@ const Home = () => {
                   compact={true}
                 />
               ))}
+
             </div>
           )}
         </div>
@@ -94,7 +95,7 @@ const Home = () => {
             <BlogSkeleton />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {posts.map((post) => (
+              {Array.isArray(posts) && posts.map((post) => (
                 <div key={post.id} className="bg-brand-cream rounded-lg shadow-sm overflow-hidden flex flex-col md:flex-row border border-brand-sand/50 group hover:shadow-md transition-shadow">
                   <div className="w-full md:w-1/2 h-60 overflow-hidden">
                     <img
@@ -134,7 +135,7 @@ const Home = () => {
           <Quote size={48} className="mx-auto mb-6 text-brand-gold opacity-50" />
           <h2 className="text-4xl font-serif text-white mb-10">Lo que dicen nuestros clientes</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {testimonios.map((testimonio) => (
+           {Array.isArray(testimonios) && testimonios.map((testimonio) => (
               <div key={testimonio.id} className="bg-white/5 p-8 rounded-xl backdrop-blur-sm border border-white/10">
                 <p className="text-lg italic mb-4 opacity-90">"{testimonio.comentario}"</p>
                 <div className="flex justify-center items-center mb-2">
