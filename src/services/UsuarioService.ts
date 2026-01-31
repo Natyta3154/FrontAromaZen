@@ -1,17 +1,20 @@
 // src/services/UsuarioService.ts
 import { apiAuth } from '../api/InstanceAxios';
 
+// Agregamos 'usuarios/' antes de login
 export const loginRequest = async (email: string, pass: string) => {
-    const { data } = await apiAuth.post('login/', { email, password: pass });
+    const { data } = await apiAuth.post('usuarios/login/', { email, password: pass });
     return data;
 };
 
-// 👇 ASEGÚRATE DE QUE ESTA FUNCIÓN ESTÉ ESCRITA ASÍ:
 export const logoutRequest = async () => {
-    return await apiAuth.get('logout/', { withCredentials: true });
+    // Agregamos 'usuarios/' antes de logout
+    return await apiAuth.get('usuarios/logout/', { withCredentials: true });
 };
 
 export const checkSessionRequest = async () => {
-    const { data } = await apiAuth.get('me/');
+    // Quitamos la barra inicial si tu InstanceAxios ya tiene '/api/' 
+    // y nos aseguramos de que sea 'usuarios/me/'
+    const { data } = await apiAuth.get('usuarios/me/'); 
     return data;
 };
