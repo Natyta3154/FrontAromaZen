@@ -1,4 +1,4 @@
-import { api } from '../api/InstanceAxios';
+import { api, apiBlog } from '../api/InstanceAxios';
 import type { Producto } from '../types/index';
 
 // --- Productos ---
@@ -50,3 +50,10 @@ export const fetchCategorias = async (): Promise<Categoria[]> => {
     const { data } = await api.get<Categoria[]>('categorias/'); // Ajusta según tu URL de Django
     return data;
 };
+
+export const fetchBlog = () => apiBlog.get('').then(r => r.data)
+export const fetchPost = (slug: string) =>
+  apiBlog.get(slug + '/').then(r => r.data)
+
+export const fetchTestimonios = () =>
+  apiBlog.get('testimonios/').then(r => r.data)

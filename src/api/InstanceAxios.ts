@@ -20,6 +20,12 @@ export const apiAuth = axios.create({
   withCredentials: true,
 });
 
+// apiBlog.ts
+export const apiBlog = axios.create({
+  baseURL: `${BASE_URL}/api/blog/`,
+})
+
+
 // CSRF (solo si usás sesión/cookies)
 api.defaults.xsrfCookieName = "csrftoken";
 api.defaults.xsrfHeaderName = "X-CSRFToken";
