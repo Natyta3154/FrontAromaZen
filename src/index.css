@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+/* 1. Importación de fuentes */
+@layer base {
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap');
+}
+
+/* 2. Configuración de Variables de Marca (Inspirado en la imagen) */
+@theme {
+  /* Colores personalizados */
+  --color-brand-cream: #F5F2EA;    /* Fondo principal (crema) */
+  --color-brand-olive: #4A4E3E;    /* Verde profundo (botones/textos) */
+  --color-brand-gold: #C6954B;     /* Acentos y botones (oro/marrón claro) */
+  --color-brand-stone: #2D2A26;    /* Títulos (gris piedra oscuro) */
+  --color-brand-sand: #E3D9C6;     /* Detalles y bordes */
+
+  /* Fuentes */
+  --font-sans: 'Inter', ui-sans-serif, system-ui;
+  --font-serif: 'Playfair Display', ui-serif, Georgia;
+}
+
+/* 3. Estilos Base */
+@layer base {
+  body {
+    background-color: var(--color-brand-cream);
+    color: var(--color-brand-stone);
+    margin: 0;
+    font-family: var(--font-sans);
+  }
+
+  h1, h2, h3, .font-serif {
+    font-family: var(--font-serif);
+  }
+}
+
+/* 4. Utilidades para el efecto Glassmorphism del Navbar */
+.glass-effect {
+  background-color: rgba(244, 245, 234, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
