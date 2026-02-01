@@ -32,7 +32,6 @@ export const realizarCompra = async (carrito: any) => {
     return data;
 };
 
-// --- BLOG Y TESTIMONIOS (Usan 'apiBlog' que apunta a /api/blog/) ---
 
 // Si apiBlog ya tiene el prefijo '/api/blog/', las rutas deben ser relativas:
 export const fetchBlog = () => 

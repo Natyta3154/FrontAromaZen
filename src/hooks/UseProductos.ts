@@ -3,9 +3,9 @@ import {
     fetchProductos, 
     fetchProductosDestacados, 
     fetchCategorias, 
-    type Categoria 
+   
 } from '../services/ProductoService';
-import type { Producto } from '../types';
+import type { Producto, Categoria } from '../types';
 
 // Cambiamos p0 por soloDestacados para que sea legible
 export const useProductos = (soloDestacados: boolean = false) => {
