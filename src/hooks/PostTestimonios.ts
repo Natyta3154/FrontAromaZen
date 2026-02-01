@@ -17,7 +17,7 @@ export const useHomeData = () => {
         // Promise.all es excelente para la carga inicial paralela
         const [postsRes, testimoniosRes] = await Promise.all([
           api.get('blog/'), // Nota: Quitamos el ?limit=3 si prefieres manejarlo en el map o en Django
-          api.get('testimonios/')
+          api.get('blog/testimonios/')
         ]);
 
         // Manejo de datos flexible (soporta DRF paginado o listas simples)

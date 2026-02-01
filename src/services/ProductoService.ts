@@ -1,59 +1,45 @@
 import { api, apiBlog } from '../api/InstanceAxios';
-import type { Producto } from '../types/index';
+import type { Categoria, Producto } from '../types/index';
 
-// --- Productos ---
+// --- PRODUCTOS (Usan 'api' que apunta a /api/) ---
 export const fetchProductos = async (): Promise<Producto[]> => {
-  const { data } = await api.get<Producto[]>('lista/'); // Agregué la / al final por Django
-  return data;
-};
-
-export const fetchProductoPorId = async (id: number): Promise<Producto> => {
-  const { data } = await api.get<Producto>(`lista/${id}/`);
+  const { data } = await api.get<Producto[]>('lista/');
   return data;
 };
 
 export const fetchProductosDestacados = async (): Promise<Producto[]> => {
+  // Ahora Django lo encontrará en /api/destacados/
   const response = await api.get<Producto[]>('destacados/');
   return response.data;
 };
 
-// --- Blog ---
-export const getPost = async (limit = 3) => {
-    const response = await api.get(`blog/?limit=${limit}`);
-    return response.data;
-};
-
-/**
- * OBTIENE UN POST ESPECÍFICO (Para la página de "Leer más")
- * Se usa el slug que viene de la URL de React
- */
-export const fetchPostPorSlug = async (slug: string) => {
-    // Importante la / final para Django
-    const { data } = await api.get(`blog/${slug}/`); 
+export const fetchCategorias = async (): Promise<Categoria[]> => {
+    const { data } = await api.get<Categoria[]>('categorias/');
     return data;
 };
 
-// --- CONTACTO (Nueva función para tu formulario) ---
+// --- CONTACTO ---
 export const enviarContacto = async (datos: any) => {
+    // Django lo encontrará en /api/consultas/
     const response = await api.post('consultas/', datos);
     return response.data;
 };
 
-// src/services/productoService.ts
-
-export interface Categoria {
-    id: number;
-    nombre: string;
-}
-
-export const fetchCategorias = async (): Promise<Categoria[]> => {
-    const { data } = await api.get<Categoria[]>('categorias/'); // Ajusta según tu URL de Django
+// --- COMPRAS (Para generar tus LOGS) ---
+export const realizarCompra = async (carrito: any) => {
+    // Esta es la ruta que activa el CompraLog solicitado el 2026-01-06
+    const { data } = await api.post('comprar/', carrito);
     return data;
 };
 
-export const fetchBlog = () => apiBlog.get('').then(r => r.data)
-export const fetchPost = (slug: string) =>
-  apiBlog.get(slug + '/').then(r => r.data)
+// --- BLOG Y TESTIMONIOS (Usan 'apiBlog' que apunta a /api/blog/) ---
+
+// Si apiBlog ya tiene el prefijo '/api/blog/', las rutas deben ser relativas:
+export const fetchBlog = () => 
+    apiBlog.get('').then(r => r.data); // Obtiene /api/blog/
+
+export const fetchPostPorSlug = (slug: string) =>
+    apiBlog.get(`${slug}/`).then(r => r.data); // Obtiene /api/blog/slug/
 
 export const fetchTestimonios = () =>
-  apiBlog.get('testimonios/').then(r => r.data)
+    apiBlog.get('testimonios/').then(r => r.data); // Obtiene /api/blog/testimonios/
