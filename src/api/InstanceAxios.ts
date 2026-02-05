@@ -16,13 +16,13 @@ export const api = axios.create({
 
 // Auth (si lo necesitás)
 export const apiAuth = axios.create({
- baseURL: `${BASE_URL}/api/`,
+ baseURL: BASE_URL,
   withCredentials: true,
 });
 
 // apiBlog.ts
 export const apiBlog = axios.create({
-  baseURL: `${BASE_URL}/api/blog/`,
+  baseURL: BASE_URL,
 })
 
 
