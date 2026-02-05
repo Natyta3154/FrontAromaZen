@@ -38,24 +38,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
-    useEffect(() => {
-        const checkSession = async () => {
-            try {
-                const data = await checkSessionRequest();
-                // Si tu API devuelve el usuario dentro de 'data.user', asegúrate de pasarlo así:
-                if (data.authenticated && data.user) {
-                    setUser(data.user);
-                } else {
-                    setUser(null);
-                }
-            } catch (error) {
+   useEffect(() => {
+    const checkSession = async () => {
+        try {
+            const data = await checkSessionRequest();
+            
+            // Ajuste: En tu backend corregido, 'data' ya contiene 
+            // 'username', 'first_name', etc., si 'authenticated' es true.
+            if (data.authenticated) {
+                // Pasamos 'data' completo porque ahí están los nombres
+                setUser(data); 
+            } else {
                 setUser(null);
-            } finally {
-                setLoading(false);
             }
-        };
-        checkSession();
-    }, []);
+        } catch (error) {
+            setUser(null);
+        } finally {
+            setLoading(false);
+        }
+    };
+    checkSession();
+}, []);
 
     const login = async (email: string, pass: string) => {
         const data = await loginRequest(email, pass);
