@@ -16,7 +16,7 @@ export const api = axios.create({
 
 // Auth (si lo necesitás)
 export const apiAuth = axios.create({
-  baseURL: BASE_URL,
+ baseURL: `${BASE_URL}/api/`,
   withCredentials: true,
 });
 

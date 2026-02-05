@@ -37,7 +37,7 @@ export const usePerfil = () => {
             const payload = { ...formData };
             if (!payload.password) delete (payload as any).password;
 
-            const response = await apiAuth.put('actualizar-perfil/', payload);
+            const response = await apiAuth.put('usuarios/actualizar-perfil/', payload);
             // Actualizamos el estado global para que el resto de la app vea los cambios
             setUser({ ...user, ...response.data });
             setIsEditing(false);
