@@ -3,13 +3,13 @@ import type { Categoria, Producto } from '../types/index';
 
 // --- PRODUCTOS (Usan 'api' que apunta a /api/) ---
 export const fetchProductos = async (): Promise<Producto[]> => {
-  const { data } = await api.get<Producto[]>('lista/');
+  const { data } = await api.get<Producto[]>('productos/lista/');
   return data;
 };
 
 export const fetchProductosDestacados = async (): Promise<Producto[]> => {
   // Ahora Django lo encontrará en /api/destacados/
-  const response = await api.get<Producto[]>('destacados/');
+  const response = await api.get<Producto[]>('productos/destacados/');
   return response.data;
 };
 
