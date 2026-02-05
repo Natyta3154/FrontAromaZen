@@ -14,21 +14,21 @@ export const fetchProductosDestacados = async (): Promise<Producto[]> => {
 };
 
 export const fetchCategorias = async (): Promise<Categoria[]> => {
-    const { data } = await api.get<Categoria[]>('categorias/');
+    const { data } = await api.get<Categoria[]>('productos/categorias/');
     return data;
 };
 
 // --- CONTACTO ---
 export const enviarContacto = async (datos: any) => {
     // Django lo encontrará en /api/consultas/
-    const response = await api.post('consultas/', datos);
+    const response = await api.post('productos/consultas/', datos);
     return response.data;
 };
 
 // --- COMPRAS (Para generar tus LOGS) ---
 export const realizarCompra = async (carrito: any) => {
     // Esta es la ruta que activa el CompraLog solicitado el 2026-01-06
-    const { data } = await api.post('comprar/', carrito);
+    const { data } = await api.post('productos/comprar/', carrito);
     return data;
 };
 
