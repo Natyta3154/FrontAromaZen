@@ -19,7 +19,7 @@ const AuthPage = () => {
                 await login(formData.email, formData.password);
             } else {
                 // REGISTRO
-                await apiAuth.post('registro/', {
+                await apiAuth.post('usuarios/registro/', {
                     username: formData.username,
                     email: formData.email,
                     password: formData.password
