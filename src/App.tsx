@@ -30,13 +30,14 @@ function App() {
               <Route path="/login" element={<AuthPage />} />
               {/* LA RUTA DEL CARRITO */}
               <Route path="/carrito" element={<CartPage />} />
+              <Route path="/catalogo" element={<Catalogo />} />
               <Route path="/nosotros" element={<Nosotros />} />
               <Route path="/contacto" element={<Contacto />} /><Route path="/blog/:slug" element={<PostDetalle />} /> 
   {/* El :slug es una variable que React capturará */}
 
               {/* Rutas Protegidas: Solo entran si hay Cookie */}
               <Route element={<ProtectedRoute />}>
-                <Route path="/catalogo" element={<Catalogo />} />
+                
                 <Route path="/perfil" element={<PerfilPage />} />
                 {/* Aquí puedes agregar /perfil o /mis-compras más adelante */}
               </Route>
