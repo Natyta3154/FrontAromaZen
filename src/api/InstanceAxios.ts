@@ -9,6 +9,7 @@ if (!BASE_URL) {
 
 export const api = axios.create({
   baseURL: BASE_URL,
+  withCredentials:true,
   headers: {
     "Content-Type": "application/json",
   },
@@ -17,7 +18,7 @@ export const api = axios.create({
 // Auth (si lo necesitás)
 export const apiAuth = axios.create({
  baseURL: BASE_URL,
-  withCredentials: true,
+  withCredentials:  true,
 });
 
 // apiBlog.ts
