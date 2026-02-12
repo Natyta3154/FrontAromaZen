@@ -5,6 +5,7 @@ import { api } from '../api/InstanceAxios';
 import { useNavigate } from 'react-router-dom';
 import { ShoppingBag, Loader2, Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { realizarCompra } from '../services/ProductoService';
 
 const CartPage = () => {
     const { cart, removeFromCart, total, clearCart } = useCart();
@@ -31,9 +32,7 @@ const CartPage = () => {
              * Enviamos la petición al backend. 
              * La cookie 'auth_token' se envía sola gracias a withCredentials en InstanceAxios.
              */
-            const response = await api.post('comprar/', {
-                items: itemsParaBackend
-            });
+          const response = await realizarCompra({ items: itemsParaBackend });
 
             const { url_pago, preference_id, pedido_id } = response.data;
 
