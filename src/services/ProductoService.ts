@@ -9,12 +9,12 @@ export const fetchProductos = async (): Promise<Producto[]> => {
 
 export const fetchProductosDestacados = async (): Promise<Producto[]> => {
   // Ahora Django lo encontrará en /api/destacados/
-  const response = await api.get<Producto[]>('destacados/');
+  const response = await api.get<Producto[]>('productos/destacados/');
   return response.data;
 };
 
 export const fetchCategorias = async (): Promise<Categoria[]> => {
-    const { data } = await api.get<Categoria[]>('categorias/');
+    const { data } = await api.get<Categoria[]>('productos/categorias/');
     return data;
 };
 
