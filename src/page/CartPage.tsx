@@ -13,6 +13,7 @@ const CartPage = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     const handleCheckout = async () => {
+        // 1. Validación de Seguridad
         if (!user || !user.email) {
             toast.error("Acceso denegado: Debes estar registrado y logueado.");
             navigate('/login');
@@ -21,31 +22,45 @@ const CartPage = () => {
 
         setIsLoading(true);
         try {
-            // 2. Formatear items para el backend
+            // 2. Formatear items para el backend (Estructura esperada por CompraService)
             const itemsParaBackend = cart.map(item => ({
                 producto_id: item.id,
                 cantidad: item.cantidad || 1
             }));
 
             /**
-             * Enviamos la petición al backend. 
-             * La cookie 'auth_token' se envía sola gracias a withCredentials en InstanceAxios.
+             * 📝 PROCESO DE COMPRA (Instrucción 2026-01-06)
+             * La cookie de sesión se adjunta automáticamente gracias a 'withCredentials' en Axios.
              */
-          const response = await realizarCompra({ items: itemsParaBackend });
+            const response = await realizarCompra({ items: itemsParaBackend });
 
-            const { url_pago, preference_id, pedido_id } = response.data;
+            // Extraemos los datos. Nota: Si tu service devuelve 'response.data', usamos 'response' directamente aquí.
+            const { url_pago, preference_id, pedido_id } = response;
 
             if (url_pago) {
-                // --- LOG DE COMPRA (Instrucción 2026-01-06) ---
-                console.log(`[LOG] Pago Iniciado. Pedido: #${pedido_id} | Pref: ${preference_id}`);
-                toast.success("Redirigiendo a Mercado Pago...");
+                // --- LOG DE CONSOLA FRONTEND ---
+                console.log(`[LOG COMPRA] ${new Date().toLocaleString()} | Pedido: #${pedido_id} | Ref: ${preference_id}`);
+                
+                toast.success("Pedido generado con éxito. Redirigiendo...");
 
-                // 3. REDIRECCIÓN DIRECTA
+                // 3. Redirección a la pasarela de Mercado Pago
                 window.location.href = url_pago;
+            } else {
+                throw new Error("No se pudo obtener la pasarela de pago.");
             }
+
         } catch (error: any) {
+            // Manejo de errores 401 (Sesión expirada) o 405 (Error de ruta)
             console.error("Error en checkout:", error.response?.data || error.message);
-            const msg = error.response?.data?.error || "Error al procesar el pago";
+            
+            const status = error.response?.status;
+            let msg = error.response?.data?.detail || error.response?.data?.error || "Error al procesar el pago";
+
+            if (status === 401) {
+                msg = "Tu sesión ha expirado. Por favor, vuelve a ingresar.";
+                navigate('/login');
+            }
+
             toast.error(msg);
         } finally {
             setIsLoading(false);
@@ -86,9 +101,7 @@ const CartPage = () => {
                                 <img src={item.imagen} alt={item.nombre} className="w-24 h-24 object-cover rounded-lg bg-stone-50" />
                                 <div className="ml-6 flex-1">
                                     <h3 className="text-lg font-medium text-stone-800">{item.nombre}</h3>
-                                    <p className="text-stone-500 text-sm italic">
-                                        Cantidad: {item.cantidad}
-                                    </p>
+                                    <p className="text-stone-500 text-sm italic">Cantidad: {item.cantidad}</p>
                                     <p className="text-stone-900 font-semibold mt-1">${(item.precio).toLocaleString()}</p>
                                 </div>
                                 <button
@@ -104,7 +117,7 @@ const CartPage = () => {
                                 Vaciar Carrito
                             </button>
                             <button onClick={() => navigate('/catalogo')} className="text-stone-600 text-sm hover:text-stone-800 font-medium">
-                                + Agregar más sahumerios
+                                + Agregar más productos
                             </button>
                         </div>
                     </div>
@@ -112,7 +125,6 @@ const CartPage = () => {
                     {/* Resumen de Compra */}
                     <div className="bg-stone-50 p-8 rounded-3xl border border-stone-200 h-fit sticky top-8 shadow-sm">
                         <h2 className="text-2xl font-light text-stone-800 mb-6 font-serif">Resumen</h2>
-
                         <div className="space-y-4 border-b border-stone-200 pb-6">
                             <div className="flex justify-between text-stone-600">
                                 <span>Subtotal</span>
@@ -129,14 +141,14 @@ const CartPage = () => {
                             <span className="text-2xl font-bold text-stone-900">${total.toLocaleString()}</span>
                         </div>
 
-                        {/* Botón de Acción Único */}
                         <button
                             onClick={handleCheckout}
                             disabled={isLoading}
-                            className={`w-full py-4 rounded-2xl font-bold text-lg transition-all flex items-center justify-center gap-2 ${isLoading
+                            className={`w-full py-4 rounded-2xl font-bold text-lg transition-all flex items-center justify-center gap-2 ${
+                                isLoading
                                 ? 'bg-stone-300 text-stone-500 cursor-not-allowed'
                                 : 'bg-stone-800 text-white hover:bg-stone-700 shadow-lg active:scale-95'
-                                }`}
+                            }`}
                         >
                             {isLoading ? (
                                 <><Loader2 className="animate-spin" size={20} /> Procesando...</>
@@ -156,4 +168,3 @@ const CartPage = () => {
 };
 
 export default CartPage;
-
