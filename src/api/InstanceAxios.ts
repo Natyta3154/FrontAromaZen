@@ -22,7 +22,7 @@ export const apiAuth = axios.create({
 
 // apiBlog.ts
 export const apiBlog = axios.create({
-  baseURL: BASE_URL,
+ baseURL: `${BASE_URL}blog/`,
 })
 
 

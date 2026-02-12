@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import { api } from '../api/InstanceAxios';
+import { fetchBlog, fetchTestimonios } from '../services/ProductoService'; // Asegúrate de que la ruta al service sea correcta
 import type { Testimonio } from '../types';
 
 export const useHomeData = () => {
   const [posts, setPosts] = useState<any[]>([]);
   const [testimonios, setTestimonios] = useState<Testimonio[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null); // Añadimos estado de error
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -14,19 +14,18 @@ export const useHomeData = () => {
         setLoading(true);
         setError(null);
 
-        // Promise.all es excelente para la carga inicial paralela
-        const [postsRes, testimoniosRes] = await Promise.all([
-          api.get('blog/'), // Nota: Quitamos el ?limit=3 si prefieres manejarlo en el map o en Django
-          api.get('blog/testimonios/')
+        // Usamos las funciones del service que ya tienen las URLs corregidas
+        const [postsData, testimoniosData] = await Promise.all([
+          fetchBlog(),
+          fetchTestimonios()
         ]);
 
-        // Manejo de datos flexible (soporta DRF paginado o listas simples)
-        const postsData = Array.isArray(postsRes.data) ? postsRes.data : postsRes.data.results || [];
-        const testimoniosData = Array.isArray(testimoniosRes.data) ? testimoniosRes.data : testimoniosRes.data.results || [];
+        // Manejo de datos (DRF puede devolver .results si hay paginación)
+        const finalPosts = Array.isArray(postsData) ? postsData : postsData.results || [];
+        const finalTestimonios = Array.isArray(testimoniosData) ? testimoniosData : testimoniosData.results || [];
 
-        // Si solo quieres 3 posts en el Home, los cortamos aquí por seguridad
-        setPosts(postsData.slice(0, 3));
-        setTestimonios(testimoniosData);
+        setPosts(finalPosts.slice(0, 3));
+        setTestimonios(finalTestimonios);
         
       } catch (err: any) {
         console.error("❌ Error cargando datos del Home:", err);

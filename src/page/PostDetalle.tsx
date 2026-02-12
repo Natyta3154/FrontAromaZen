@@ -8,7 +8,9 @@ const PostDetalle = () => {
 
     useEffect(() => {
         if (slug) {
-            fetchPostPorSlug(slug).then(setPost);
+            fetchPostPorSlug(slug)
+            .then(setPost)
+            .catch(() => console.error("Ritual no encontrado"));
         }
     }, [slug]);
 
