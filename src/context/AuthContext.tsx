@@ -79,12 +79,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
-    return (
-        <AuthContext.Provider value={{ user, setUser, login, logout, loading }}>
-            {/* Solo renderizamos los hijos cuando terminó de chequear la sesión */}
-            {!loading && children}
-        </AuthContext.Provider>
-    );
+ return (
+    <AuthContext.Provider value={{ user, setUser, login, logout, loading }}>
+        {children} {/* ✅ Renderiza siempre, no bloquees el inicio */}
+    </AuthContext.Provider>
+);
 };
 
 export const useAuth = () => {
