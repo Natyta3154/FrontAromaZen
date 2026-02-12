@@ -3,7 +3,7 @@ import type { Categoria, Producto } from '../types/index';
 
 // --- PRODUCTOS (Usan 'api' que apunta a /api/) ---
 export const fetchProductos = async (): Promise<Producto[]> => {
-  const { data } = await api.get<Producto[]>('lista/');
+  const { data } = await api.get<Producto[]>('productos/lista/');
   return data;
 };
 
