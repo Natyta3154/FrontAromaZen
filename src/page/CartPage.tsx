@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
-import { api } from '../api/InstanceAxios';
 import { useNavigate } from 'react-router-dom';
 import { ShoppingBag, Loader2, Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
