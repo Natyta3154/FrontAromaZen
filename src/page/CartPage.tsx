@@ -31,9 +31,9 @@ const CartPage = () => {
              * Enviamos la petición al backend. 
              * La cookie 'auth_token' se envía sola gracias a withCredentials en InstanceAxios.
              */
-          const response = await realizarCompra({ items: itemsParaBackend });
+          const data = await realizarCompra({ items: itemsParaBackend });
 
-            const { url_pago, preference_id, pedido_id } = response.data;
+            const { url_pago, preference_id, pedido_id } = data;
 
             if (url_pago) {
                 // --- LOG DE COMPRA (Instrucción 2026-01-06) ---
