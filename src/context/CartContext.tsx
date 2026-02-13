@@ -20,20 +20,20 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
     // Cargar carrito de LocalStorage al iniciar
     useEffect(() => {
-        const savedCart = localStorage.getItem('cart_aroma');
+        const savedCart = sessionStorage.getItem('cart_aroma');
         if (savedCart) {
             try {
                 setCart(JSON.parse(savedCart));
             } catch (error) {
-                console.error("Error parsing cart from localStorage", error);
+                console.error("Error parsing cart from sessionStorage", error);
                 setCart([]);
             }
         }
     }, []);
 
-    // Guardar en LocalStorage cada vez que cambie
+    // Guardar en sessionStorage cada vez que cambie
     useEffect(() => {
-        localStorage.setItem('cart_aroma', JSON.stringify(cart));
+        sessionStorage.setItem('cart_aroma', JSON.stringify(cart));
     }, [cart]);
 
     const addToCart = (product: Producto, quantity: number = 1) => {

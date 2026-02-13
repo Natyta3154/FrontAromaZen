@@ -13,6 +13,7 @@ import { Toaster } from 'react-hot-toast';
 import Nosotros from './page/Nosotros';
 import Contacto from './page/Contacto';
 import PostDetalle from './page/PostDetalle';
+import SuccessPage from './page/SuccessPage';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
               <Route path="/login" element={<AuthPage />} />
               {/* LA RUTA DEL CARRITO */}
               <Route path="/carrito" element={<CartPage />} />
+              <Route path="/success" element={<SuccessPage />} /> {/* Esta es la clave para limpiar el carrito */}
               <Route path="/catalogo" element={<Catalogo />} />
               <Route path="/nosotros" element={<Nosotros />} />
               <Route path="/contacto" element={<Contacto />} /><Route path="/blog/:slug" element={<PostDetalle />} /> 
