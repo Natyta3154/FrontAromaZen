@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Importante para la navegación fluida
 import {apiAuth} from '../api/InstanceAxios';
-import { User, Mail, Lock, ArrowRight } from 'lucide-react';
+import { User, Mail, Lock, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const AuthPage = () => {
     const [isLogin, setIsLogin] = useState(true);
+    const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({ username: '', email: '', password: '' });
     
     const { login } = useAuth(); 
@@ -83,17 +84,26 @@ const AuthPage = () => {
 
                     <div className="relative">
                         <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-gold" size={18} />
+                     {/* Campo de Contraseña con Ojito */}
                         <input 
-                            type="password" 
+                            type={showPassword ? 'text' : 'password'} 
                             placeholder="Contraseña"
                             className="w-full pl-12 pr-6 py-4 bg-brand-cream/30 rounded-2xl border border-brand-sand outline-none focus:ring-2 focus:ring-brand-gold/20 text-brand-stone"
                             value={formData.password}
                             onChange={(e) => setFormData({...formData, password: e.target.value})}
                             required
                         />
+                        {/* Botón del Ojito */}
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute right-4 top-1/2 -translate-y-1/2 text-brand-olive/50 hover:text-brand-gold transition-colors cursor-pointer"
+                        >
+                            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                        </button>
                     </div>
 
-                    <button type="submit" className="w-full bg-brand-olive text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-brand-gold transition-all shadow-lg hover:-translate-y-1">
+                    <button type="submit" className="w-full bg-brand-olive cursor-pointer text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-brand-gold transition-all shadow-lg hover:-translate-y-1">
                         {isLogin ? 'Entrar' : 'Registrarme'} <ArrowRight size={18} />
                     </button>
                 </form>
@@ -101,7 +111,7 @@ const AuthPage = () => {
                 <div className="mt-8 text-center text-sm text-brand-olive/70">
                     <button 
                         onClick={() => setIsLogin(!isLogin)} 
-                        className="hover:text-brand-gold transition-colors underline decoration-brand-sand underline-offset-4"
+                        className=" cursor-pointer hover:text-brand-gold transition-colors underline decoration-brand-sand underline-offset-4"
                     >
                         {isLogin ? '¿No tienes cuenta? Regístrate' : '¿Ya tienes cuenta? Inicia sesión'}
                     </button>
