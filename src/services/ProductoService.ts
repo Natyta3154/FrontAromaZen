@@ -37,12 +37,12 @@ export const realizarCompra = async (carrito: any) => {
 
 // 1. Obtiene la lista de todos los posts (Correcto, usa la raíz del blog)
 export const fetchBlog = () => 
-    apiBlog.get('').then(r => r.data); 
+    apiBlog.get('posts/').then(r => r.data); 
 
 // 2. Detalle del post
 // En tu urls.py pusiste: path('<slug:slug>/', ...) SIN la palabra 'posts/'
 export const fetchPostPorSlug = (slug: string) =>
-    apiBlog.get(`${slug}/`).then(r => r.data); // Quitamos 'posts/'
+    apiBlog.get(`posts/${slug}/`).then(r => r.data);
 
 // 3. Testimonios (Correcto)
 export const fetchTestimonios = () =>

@@ -7,15 +7,25 @@ import toast from 'react-hot-toast';
 import { ProductSkeleton } from '../components/common/Skeleton';
 import { ProductCard } from '../components/products/ProductCard';
 import { QuickViewModal } from '../components/products/QuickViewModal';
+import SEO from '../components/SEO';
+
+
+
 
 const Catalogo = () => {
     // 1. CAMBIO VITAL: Usar 'false' para obtener TODOS los productos y las categorías
     const { productos, categorias, loading, error } = useProductos(false);
-
     const { addToCart } = useCart();
     const [categoriaActiva, setCategoriaActiva] = useState<number | "Todos">("Todos");
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedProduct, setSelectedProduct] = useState<Producto | null>(null);
+
+
+// 2. Lógica para el nombre de la categoría en el título SEO
+    const nombreCategoriaActual = categoriaActiva === "Todos" 
+        ? "Todos los Productos" 
+        : categorias.find(c => c.id === categoriaActiva)?.nombre || "Productos";
+
 
     const handleAddQuick = (p: Producto) => {
         addToCart(p);
@@ -42,6 +52,11 @@ const Catalogo = () => {
 
     return (
         <div className="min-h-screen bg-brand-cream pb-10">
+            {/* 👇 AQUÍ PONES EL COMPONENTE SEO */}
+            <SEO 
+                title={`${nombreCategoriaActual}`} 
+                description={`Explora nuestra selección artesanal de ${nombreCategoriaActual.toLowerCase()} en AromaZen. Sahumerios y esencias naturales para tu hogar.`} 
+            />
             {/* Header */}
             <header className="py-12 px-8 bg-white border-b border-brand-sand/50">
                 <div className="w-full flex flex-col md:flex-row md:justify-between md:items-end gap-6">

@@ -1,0 +1,17 @@
+
+#--robots.txt es el que le dice a Google y otros buscadores qué partes de AromaZen deben mostrar en los resultados de búsqueda y cuáles no.--#
+
+
+# https://www.robotstxt.org/robotstxt.html
+
+# Permitir que todos los buscadores indexen el sitio
+User-agent: *
+Allow: /
+
+# Evitar que se indexen páginas privadas o de proceso
+Disallow: /perfil
+Disallow: /checkout
+Disallow: /pago-exitoso
+
+# Si tienes un sitemap (opcional por ahora)
+# Sitemap: https://tu-dominio-de-vercel.app/sitemap.xml

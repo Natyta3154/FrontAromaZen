@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
-import { ShoppingCart, User, Menu, X, Flower2, LogOut, ShieldCheck, ChevronDown, Settings } from 'lucide-react';
+import { ShoppingCart, User, Menu, X, LogOut, ShieldCheck, ChevronDown, Settings } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import { ADMIN_URL } from '../api/InstanceAxios';
-
+import logo from "../assets/logo-dor.png";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -47,18 +47,35 @@ const Navbar = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="flex justify-between h-20 items-center">
 
-            {/* 1. IZQUIERDA: Logo */}
-            <div className="flex-shrink-0 lg:w-1/4">
-              <Link to="/" className="flex items-center space-x-3 group">
-                <div className="relative bg-brand-gold p-2 rounded-xl transform group-hover:scale-105 transition-transform shadow-sm">
-                  <Flower2 className="h-6 w-6 text-white" />
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-2xl font-bold text-brand-stone tracking-tight">AromaZen</span>
-                  <span className="text-[10px] text-brand-olive tracking-widest uppercase font-medium">Esencias Naturales</span>
-                </div>
-              </Link>
-            </div>
+        {/* 1. IZQUIERDA: Logo con el toque AromaZen */}
+<div className="flex-shrink-0 lg:w-1/4">
+  <Link to="/" className="flex items-center space-x-4 group">
+    {/* Contenedor del Icono/Logo */}
+    <div className="relative">
+      <div className="absolute -inset-1 bg-gradient-to-tr from-brand-gold/40 to-brand-olive/20 rounded-full blur-sm group-hover:blur-md transition-all duration-300 opacity-0 group-hover:opacity-100"></div>
+      <div className="relative bg-brand-gold p-1.5 rounded-1xl border border-brand-sand shadow-sm transform group-hover:scale-105 group-hover:-rotate-3 transition-all duration-300 overflow-hidden">
+        <img
+          src={logo}
+          alt="AromaZen Logo"
+          className="h-10 lg:h-12 w-auto object-contain"
+        />
+      </div>
+    </div>
+
+    {/* Texto del Logo */}
+    <div className="flex flex-col">
+      <h1 className="text-2xl font-serif font-bold text-brand-stone tracking-tight leading-none group-hover:text-brand-gold transition-colors duration-300">
+        Aroma<span className="text-brand-gold">Zen</span>
+      </h1>
+      <div className="flex items-center space-x-1">
+        <span className="h-[1px] w-4 bg-brand-gold/50"></span>
+        <span className="text-[9px] text-brand-olive tracking-[0.2em] uppercase font-bold italic">
+          Esencias Naturales
+        </span>
+      </div>
+    </div>
+  </Link>
+</div>
 
             {/* 2. CENTRO: Menú Desktop */}
             <div className="hidden lg:flex flex-grow justify-center">
