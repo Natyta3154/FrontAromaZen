@@ -29,7 +29,7 @@ const CartPage = () => {
         }
     }, [cart.length]); // Se ejecuta al cargar o si el carrito cambia
 
-    const handleCheckout = async () => {
+const handleCheckout = async () => {
         if (!user || !user.email) {
             toast.error("Acceso denegado: Debes estar registrado y logueado.");
             navigate('/login');
@@ -43,26 +43,34 @@ const CartPage = () => {
                 cantidad: item.cantidad || 1
             }));
 
-            // Llamada al servicio
+            // Llamada al servicio (Ahora que ya no da 403)
             const data = await realizarCompra({ items: itemsParaBackend });
-            const { url_pago, preference_id, pedido_id } = data;
+            const { url_pago, preference_id, pedido_id, total } = data;
 
             if (url_pago) {
-                // 📝 LOG DE COMPRA (Instrucción 2026-01-06)
-                console.log(`[LOG] Pago Iniciado. Pedido: #${pedido_id} | Pref: ${preference_id}`);
+                // 📝 LOG DE COMPRA (Actualizado 18-02-2026)
+                console.log(
+                    `%c[LOG COMPRA] 🛒\nPedido: #${pedido_id}\nPreferencia: ${preference_id}\nTotal: $${total}`, 
+                    "color: #22c55e; font-weight: bold; background: #f0fdf4; padding: 5px; border-radius: 4px;"
+                );
                 
                 toast.success("Redirigiendo a Mercado Pago...");
+
+                // Opcional: Vaciar el carrito local antes de redirigir 
+                // para que no vea los productos si vuelve atrás.
+                // clearCart(); 
+
+                // Redirección externa
                 window.location.href = url_pago;
             }
         } catch (error: any) {
             console.error("Error en checkout:", error.response?.data || error.message);
-            const msg = error.response?.data?.error || "Error al procesar el pago";
+            const msg = error.response?.data?.detail || error.response?.data?.error || "Error al procesar el pago";
             toast.error(msg);
         } finally {
             setIsLoading(false);
         }
     };
-
     // --- RENDERIZADO (Se mantiene igual) ---
     if (cart.length === 0) {
         return (
