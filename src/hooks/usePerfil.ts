@@ -6,6 +6,8 @@ export const usePerfil = () => {
     const { user, setUser } = useAuth();
     const [isEditing, setIsEditing] = useState(false);
     const [loading, setLoading] = useState(false);
+    
+    // 1. Estado inicial vacío
     const [formData, setFormData] = useState({
         username: '',
         email: '',
@@ -14,13 +16,16 @@ export const usePerfil = () => {
         password: ''
     });
 
+   // 2. Efecto de carga: Mapeamos los datos con fallbacks
     useEffect(() => {
         if (user) {
+            console.log("Datos del usuario en el hook:", user); // 🔍 Revisa esto en la consola
             setFormData({
                 username: user.username || '',
                 email: user.email || '',
-                first_name: user.first_name || '',
-                last_name: user.last_name || '',
+                // Agregamos alternativas por si las keys son diferentes
+                first_name: user.first_name || user.first_name || '', 
+                last_name: user.last_name || user.last_name || '',
                 password: ''
             });
         }
@@ -70,8 +75,9 @@ const saveProfile = async () => {
     }
 };
 
-    const toggleEdit = () => {
+const toggleEdit = () => {
         if (isEditing && user) {
+            // Al cancelar, restauramos los datos originales
             setFormData({
                 username: user.username || '',
                 email: user.email || '',
