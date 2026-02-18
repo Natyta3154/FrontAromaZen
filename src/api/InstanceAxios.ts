@@ -31,27 +31,25 @@ export const ADMIN_URL = `${BASE_URL.replace(/\/api\/?$/, "")}/admin/`;
 // 2. Lógica de interceptores mejorada para Token Auth
 const setupInterceptors = (instance: any) => {
   instance.interceptors.request.use((config: any) => {
-    // 🛡️ Manejo de CSRF Token
+    // 1. CSRF (Sigue leyéndose de la cookie porque no suele ser HttpOnly)
     const csrftoken = getCookie('csrftoken');
     if (csrftoken) {
       config.headers['X-CSRFToken'] = csrftoken;
     }
 
-    // 🔑 Manejo de Auth Token (Detectado en tus cookies)
-    const authToken = getCookie('auth_token');
+    // 2. Auth Token (Ahora desde LocalStorage)
+    const authToken = localStorage.getItem('auth_token');
+    
     if (authToken) {
-      // Importante: El formato debe ser "Token [valor]" para Django REST Framework
       config.headers['Authorization'] = `Token ${authToken}`;
-       console.log("🔑 Token inyectado con éxito");
+      console.log("🔑 Token inyectado desde LocalStorage");
     } else {
-      // Si ves este mensaje en consola, JS no puede leer la cookie
-       console.warn("⚠️ No se pudo leer el auth_token de las cookies");
+      console.warn("⚠️ No se encontró auth_token en LocalStorage");
     }
 
     return config;
   });
 };
-
 // 3. Aplicamos los interceptores
 setupInterceptors(api);
 setupInterceptors(apiAuth);
