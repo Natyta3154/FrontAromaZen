@@ -30,24 +30,45 @@ export const usePerfil = () => {
         setFormData(prev => ({ ...prev, [field]: value }));
     };
 
-    const saveProfile = async () => {
-        setLoading(true);
-        try {
-            // No enviamos password si está vacío
-            const payload = { ...formData };
-            if (!payload.password) delete (payload as any).password;
+const saveProfile = async () => {
+    setLoading(true);
+    try {
+        // 1. Preparamos el payload (copia limpia)
+        const payload = { ...formData };
+        
+        // 2. Limpieza de campos: quitamos password si está vacío 
+        // y nos aseguramos de no enviar el username si el backend no permite cambiarlo
+        if (!payload.password) delete (payload as any).password;
 
-            const response = await apiAuth.put('usuarios/actualizar-perfil/', payload);
-            // Actualizamos el estado global para que el resto de la app vea los cambios
-            setUser({ ...user, ...response.data });
-            setIsEditing(false);
-            return { success: true };
-        } catch (error: any) {
-            return { success: false, error: error.response?.data?.error || "Error al actualizar" };
-        } finally {
-            setLoading(false);
-        }
-    };
+        const response = await apiAuth.put('usuarios/actualizar-perfil/', payload);
+        
+      
+        // Si Django devuelve el objeto usuario directamente en data, lo mezclamos.
+        // Usamos { ...user } para no perder datos que el backend no devuelve (como el token o ID si no vienen)
+        const updatedData = response.data;
+        
+        setUser({ 
+            ...user, 
+            ...updatedData, 
+            authenticated: true // Nos aseguramos de mantener el estado de login
+        });
+
+        setIsEditing(false);
+        
+        // Limpiamos el campo de password del formulario por seguridad
+        setFormData(prev => ({ ...prev, password: '' }));
+        
+        return { success: true };
+    } catch (error: any) {
+        console.error("Error en saveProfile:", error);
+        return { 
+            success: false, 
+            error: error.response?.data?.error || "No se pudo actualizar el perfil" 
+        };
+    } finally {
+        setLoading(false);
+    }
+};
 
     const toggleEdit = () => {
         if (isEditing && user) {

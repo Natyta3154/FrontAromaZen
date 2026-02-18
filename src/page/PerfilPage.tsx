@@ -68,6 +68,24 @@ const PerfilPage = () => {
                                 )}
                             </div>
 
+                            {/* Contraseña (Solo aparece al editar) */}
+                            {isEditing && (
+                                <div className="space-y-1 md:col-span-2">
+                                    <label className="text-xs font-bold text-stone-400 uppercase tracking-tighter">
+                                        Nueva Contraseña (dejar en blanco para no cambiar)
+                                    </label>
+                                    <input
+                                        type="password"
+                                        className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-2xl outline-none focus:ring-2 focus:ring-stone-200"
+                                        placeholder="••••••••"
+                                        value={formData.password}
+                                        onChange={(e) => handleInputChange('password', e.target.value)}
+                                    />
+                                </div>
+                            )}
+
+
+
                             {/* Usuario (Solo lectura) */}
                             <div className="space-y-1">
                                 <label className="text-xs font-bold text-stone-400 uppercase tracking-tighter">Nombre de Usuario</label>
