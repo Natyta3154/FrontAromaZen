@@ -19,38 +19,38 @@ function App() {
   return (
     <AuthProvider>
       <CartProvider>
-      <Router>
-        {/* Este componente permite que los mensajes se vean */}
+        <Router>
+          {/* Este componente permite que los mensajes se vean */}
           <Toaster position="bottom-right" reverseOrder={false} />
-        <div className="min-h-screen bg-[#fdfbf7] flex flex-col">
-          <Navbar />
-          <main className="flex-grow">
-            <Routes>
-              {/* Rutas Públicas */}
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<AuthPage />} />
-              {/* LA RUTA DEL CARRITO */}
-              <Route path="/carrito" element={<CartPage />} />
-              <Route path="/success" element={<SuccessPage />} /> {/* Esta es la clave para limpiar el carrito */}
-              <Route path="/catalogo" element={<Catalogo />} />
-              <Route path="/nosotros" element={<Nosotros />} />
-              <Route path="/contacto" element={<Contacto />} /><Route path="/blog/:slug" element={<PostDetalle />} /> 
-  {/* El :slug es una variable que React capturará */}
+          <div className="min-h-screen bg-[#fdfbf7] flex flex-col">
+            <Navbar />
+            <main className="flex-grow">
+              <Routes>
+                {/* Rutas Públicas */}
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<AuthPage />} />
+                {/* LA RUTA DEL CARRITO */}
+                <Route path="/carrito" element={<CartPage />} />
+                {/* Esta es la clave para limpiar el carrito */}
+                <Route path="/catalogo" element={<Catalogo />} />
+                <Route path="/nosotros" element={<Nosotros />} />
+                <Route path="/contacto" element={<Contacto />} /><Route path="/blog/:slug" element={<PostDetalle />} />
+                {/* El :slug es una variable que React capturará */}
 
-              {/* Rutas Protegidas: Solo entran si hay Cookie */}
-              <Route element={<ProtectedRoute />}>
-                
-                <Route path="/perfil" element={<PerfilPage />} />
-                {/* Aquí puedes agregar /perfil o /mis-compras más adelante */}
-              </Route>
 
-              {/* Redirección automática si la ruta no existe */}
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </main>
-          <Footer />
-        </div>
-      </Router>
+
+                {/* Rutas Protegidas: Solo entran si hay Cookie */}
+                <Route element={<ProtectedRoute />}>
+                  <Route path="/perfil" element={<PerfilPage />} />
+                  <Route path="/success" element={<SuccessPage />} />
+                </Route>
+                {/* Redirección automática si la ruta no existe */}
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
+            </main>
+            <Footer />
+          </div>
+        </Router>
       </CartProvider>
     </AuthProvider>
   );

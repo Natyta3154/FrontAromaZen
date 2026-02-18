@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             
             // Ajuste: En tu backend corregido, 'data' ya contiene 
             // 'username', 'first_name', etc., si 'authenticated' es true.
-            if (data.authenticated) {
+            if (data &&data.authenticated) {
                 // Pasamos 'data' completo porque ahí están los nombres
                 setUser(data); 
             } else {
@@ -55,6 +55,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             setUser(null);
         } finally {
             setLoading(false);
+            console.error("Error validando sesión, manteniendo estado local.");
         }
     };
     checkSession();

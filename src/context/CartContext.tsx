@@ -16,24 +16,20 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
-    const [cart, setCart] = useState<CartItem[]>([]);
-
-    // Cargar carrito de LocalStorage al iniciar
-    useEffect(() => {
-        const savedCart = sessionStorage.getItem('cart_aroma');
-        if (savedCart) {
-            try {
-                setCart(JSON.parse(savedCart));
-            } catch (error) {
-                console.error("Error parsing cart from sessionStorage", error);
-                setCart([]);
-            }
+    // 1. Inicialización: Leemos de localStorage una sola vez al arrancar
+    const [cart, setCart] = useState<CartItem[]>(() => {
+        const savedCart = localStorage.getItem('cart_aroma_zen');
+        try {
+            return savedCart ? JSON.parse(savedCart) : [];
+        } catch (error) {
+            console.error("Error al cargar el carrito:", error);
+            return [];
         }
-    }, []);
+    });
 
-    // Guardar en sessionStorage cada vez que cambie
+    // 2. Persistencia: Cada vez que el carrito cambie, lo guardamos en localStorage
     useEffect(() => {
-        sessionStorage.setItem('cart_aroma', JSON.stringify(cart));
+        localStorage.setItem('cart_aroma_zen', JSON.stringify(cart));
     }, [cart]);
 
     const addToCart = (product: Producto, quantity: number = 1) => {
@@ -52,9 +48,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         setCart(prev => prev.filter(item => item.id !== id));
     };
 
-    const clearCart = () => setCart([]);
+    const clearCart = () => {
+        setCart([]);
+        localStorage.removeItem('cart_aroma_zen');
+    };
 
-    const total = cart.reduce((acc, item) => acc + (item.precio * item.cantidad), 0);
+    const total = cart.reduce((acc, item) => acc + (Number(item.precio) * item.cantidad), 0);
 
     return (
         <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart, total }}>
