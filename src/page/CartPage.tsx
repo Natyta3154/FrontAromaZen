@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +11,23 @@ const CartPage = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
+
+
+// 🛡️ EFECTO DE SEGURIDAD: Asegura que tengamos el token CSRF al cargar el carrito
+    useEffect(() => {
+        const prepareCheckout = async () => {
+            try {
+                // Hacemos una petición GET simple (por ejemplo, a categorías o productos)
+                // Esto fuerza a Django a enviar el header Set-Cookie: csrftoken
+                await api.get('productos/categorias/'); 
+            } catch (err) {
+                console.warn("No se pudo refrescar el token CSRF");
+            }
+        };
+        prepareCheckout();
+    }, []);
+
+
 
     const handleCheckout = async () => {
         if (!user || !user.email) {
@@ -35,13 +52,13 @@ const CartPage = () => {
 
             const { url_pago, preference_id, pedido_id } = data;
 
-            if (url_pago) {
+            if (data.url_pago) {
                 // --- LOG DE COMPRA (Instrucción 2026-01-06) ---
                 console.log(`[LOG] Pago Iniciado. Pedido: #${pedido_id} | Pref: ${preference_id}`);
                 toast.success("Redirigiendo a Mercado Pago...");
 
                 // 3. REDIRECCIÓN DIRECTA
-                window.location.href = url_pago;
+                window.location.href = data.url_pago;
             }
         } catch (error: any) {
             console.error("Error en checkout:", error.response?.data || error.message);
