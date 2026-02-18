@@ -38,27 +38,36 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
-   useEffect(() => {
+useEffect(() => {
     const checkSession = async () => {
         try {
+            // 1. Intentamos validar con el servidor
             const data = await checkSessionRequest();
             
-            // Ajuste: En tu backend corregido, 'data' ya contiene 
-            // 'username', 'first_name', etc., si 'authenticated' es true.
-            if (data &&data.authenticated) {
-                // Pasamos 'data' completo porque ahí están los nombres
+            // 2. Si el servidor responde con el usuario, lo actualizamos (por si cambió el nombre, etc.)
+            if (data && (data.id || data.authenticated)) {
                 setUser(data); 
-            } else {
-                setUser(null);
             }
-        } catch (error) {
-            setUser(null);
+        } catch (error: any) {
+            
+            // Si el servidor da error (403, 500, o no hay internet):
+            // NO HACEMOS setUser(null). 
+            // Simplemente imprimimos el aviso y dejamos que el usuario 
+            // que cargamos en el useState inicial se quede ahí.
+            console.error("No se pudo validar con el servidor, manteniendo sesión local.");
         } finally {
+            // 4. Pase lo que pase, dejamos de cargar
             setLoading(false);
-            console.error("Error validando sesión, manteniendo estado local.");
         }
     };
-    checkSession();
+
+    // Solo verificamos si tenemos un token guardado
+    const hasToken = localStorage.getItem('auth_token');
+    if (hasToken) {
+        checkSession();
+    } else {
+        setLoading(false);
+    }
 }, []);
 
     const login = async (email: string, pass: string) => {
