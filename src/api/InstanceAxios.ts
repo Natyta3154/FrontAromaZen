@@ -1,38 +1,34 @@
 import axios from "axios";
 
-// ⚠️ Sin fallback: si no está la env, debe fallar
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 if (!BASE_URL) {
   throw new Error("VITE_API_URL no está definida");
 }
 
-export const api = axios.create({
+// Configuración base para todas las peticiones
+const commonConfig = {
   baseURL: BASE_URL,
-  withCredentials:true,
+  withCredentials: true,
+  xsrfCookieName: "csrftoken",
+  xsrfHeaderName: "X-CSRFToken",
   headers: {
     "Content-Type": "application/json",
+    "X-Requested-With": "XMLHttpRequest", // Ayuda a Django a identificar peticiones AJAX
   },
-});
+};
 
-// Auth (si lo necesitás)
-export const apiAuth = axios.create({
- baseURL: BASE_URL,
-  withCredentials:  true,
-});
+// Instancia estándar para productos y consultas
+export const api = axios.create(commonConfig);
 
-// apiBlog.ts
+// Instancia para autenticación (login, logout, me)
+export const apiAuth = axios.create(commonConfig);
+
+// Instancia para el Blog (si requiere base path distinto)
 export const apiBlog = axios.create({
+  ...commonConfig,
   baseURL: `${BASE_URL.replace(/\/$/, "")}/blog/`,
-})
+});
 
-
-// CSRF (solo si usás sesión/cookies)
-api.defaults.xsrfCookieName = "csrftoken";
-api.defaults.xsrfHeaderName = "X-CSRFToken";
-// Solo para apiAuth que maneja sesión
-apiAuth.defaults.xsrfCookieName = "csrftoken";
-apiAuth.defaults.xsrfHeaderName = "X-CSRFToken";
-
-// Admin
+// Admin URL
 export const ADMIN_URL = `${BASE_URL.replace(/\/api\/?$/, "")}/admin/`;
