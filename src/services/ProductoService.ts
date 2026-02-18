@@ -1,4 +1,4 @@
-import { api, apiBlog } from '../api/InstanceAxios';
+import { api, apiAuth, apiBlog } from '../api/InstanceAxios';
 import type { Categoria, Producto } from '../types/index';
 
 // --- PRODUCTOS (Usan 'api' que apunta a /api/) ---
@@ -28,7 +28,7 @@ export const enviarContacto = async (datos: any) => {
 // --- COMPRAS (Para generar tus LOGS) ---
 export const realizarCompra = async (carrito: any) => {
     // Esta es la ruta que activa el CompraLog solicitado el 2026-01-06
-    const { data } = await api.post('productos/comprar/', carrito);
+    const { data } = await apiAuth.post('productos/comprar/', carrito);
     return data;
 };
 
