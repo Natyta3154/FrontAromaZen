@@ -1,10 +1,12 @@
-// Función para obtener el valor de una cookie por su nombre
-export const getCookie = (name) => {
-    let cookieValue = null;
+// src/utils/cookies.ts
+
+export const getCookie = (name: string): string | null => {
+    let cookieValue: string | null = null;
     if (document.cookie && document.cookie !== '') {
         const cookies = document.cookie.split(';');
         for (let i = 0; i < cookies.length; i++) {
             const cookie = cookies[i].trim();
+            // ¿Buscas el nombre de la cookie seguido de '='?
             if (cookie.substring(0, name.length + 1) === (name + '=')) {
                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                 break;

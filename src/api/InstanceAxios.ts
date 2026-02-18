@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getCookie } from '../utils/cookies.ts';
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -6,7 +7,6 @@ if (!BASE_URL) {
   throw new Error("VITE_API_URL no está definida");
 }
 
-// Configuración base para todas las peticiones
 const commonConfig = {
   baseURL: BASE_URL,
   withCredentials: true,
@@ -14,21 +14,32 @@ const commonConfig = {
   xsrfHeaderName: "X-CSRFToken",
   headers: {
     "Content-Type": "application/json",
-    "X-Requested-With": "XMLHttpRequest", // Ayuda a Django a identificar peticiones AJAX
+    "X-Requested-With": "XMLHttpRequest",
   },
 };
 
-// Instancia estándar para productos y consultas
+// 1. Definimos las instancias PRIMERO
 export const api = axios.create(commonConfig);
-
-// Instancia para autenticación (login, logout, me)
 export const apiAuth = axios.create(commonConfig);
-
-// Instancia para el Blog (si requiere base path distinto)
 export const apiBlog = axios.create({
   ...commonConfig,
   baseURL: `${BASE_URL.replace(/\/$/, "")}/blog/`,
 });
 
-// Admin URL
 export const ADMIN_URL = `${BASE_URL.replace(/\/api\/?$/, "")}/admin/`;
+
+// 2. Definimos la lógica de los interceptores
+const setupInterceptors = (instance: any) => {
+  instance.interceptors.request.use((config: any) => {
+    const csrftoken = getCookie('csrftoken');
+    if (csrftoken) {
+      config.headers['X-CSRFToken'] = csrftoken;
+    }
+    return config;
+  });
+};
+
+// 3. Aplicamos los interceptores DESPUÉS de haber creado las instancias
+setupInterceptors(api);
+setupInterceptors(apiAuth);
+setupInterceptors(apiBlog);
