@@ -18,7 +18,7 @@ const commonConfig = {
   },
 };
 
-// 1. Definimos las instancias PRIMERO
+// 1. Definimos las instancias
 export const api = axios.create(commonConfig);
 export const apiAuth = axios.create(commonConfig);
 export const apiBlog = axios.create({
@@ -28,18 +28,27 @@ export const apiBlog = axios.create({
 
 export const ADMIN_URL = `${BASE_URL.replace(/\/api\/?$/, "")}/admin/`;
 
-// 2. Definimos la lógica de los interceptores
+// 2. Lógica de interceptores mejorada para Token Auth
 const setupInterceptors = (instance: any) => {
   instance.interceptors.request.use((config: any) => {
+    // 🛡️ Manejo de CSRF Token
     const csrftoken = getCookie('csrftoken');
     if (csrftoken) {
       config.headers['X-CSRFToken'] = csrftoken;
     }
+
+    // 🔑 Manejo de Auth Token (Detectado en tus cookies)
+    const authToken = getCookie('auth_token');
+    if (authToken) {
+      // Importante: El formato debe ser "Token [valor]" para Django REST Framework
+      config.headers['Authorization'] = `Token ${authToken}`;
+    }
+
     return config;
   });
 };
 
-// 3. Aplicamos los interceptores DESPUÉS de haber creado las instancias
+// 3. Aplicamos los interceptores
 setupInterceptors(api);
 setupInterceptors(apiAuth);
 setupInterceptors(apiBlog);
