@@ -42,6 +42,10 @@ const setupInterceptors = (instance: any) => {
     if (authToken) {
       // Importante: El formato debe ser "Token [valor]" para Django REST Framework
       config.headers['Authorization'] = `Token ${authToken}`;
+       console.log("🔑 Token inyectado con éxito");
+    } else {
+      // Si ves este mensaje en consola, JS no puede leer la cookie
+       console.warn("⚠️ No se pudo leer el auth_token de las cookies");
     }
 
     return config;
