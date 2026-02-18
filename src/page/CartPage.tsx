@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { ShoppingBag, Loader2, Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { realizarCompra } from '../services/ProductoService';
+import { api } from '../api/InstanceAxios';
 
 const CartPage = () => {
     const { cart, removeFromCart, total, clearCart } = useCart();
@@ -13,7 +14,14 @@ const CartPage = () => {
     const [isLoading, setIsLoading] = useState(false);
 
 
-// 🛡️ EFECTO DE SEGURIDAD: Asegura que tengamos el token CSRF al cargar el carrito
+    const handleCheckout = async () => {
+        if (!user || !user.email) {
+            toast.error("Acceso denegado: Debes estar registrado y logueado.");
+            navigate('/login');
+            return;
+        }
+
+        // 🛡️ EFECTO DE SEGURIDAD: Asegura que tengamos el token CSRF al cargar el carrito
     useEffect(() => {
         const prepareCheckout = async () => {
             try {
@@ -27,14 +35,6 @@ const CartPage = () => {
         prepareCheckout();
     }, []);
 
-
-
-    const handleCheckout = async () => {
-        if (!user || !user.email) {
-            toast.error("Acceso denegado: Debes estar registrado y logueado.");
-            navigate('/login');
-            return;
-        }
 
         setIsLoading(true);
         try {
@@ -52,13 +52,13 @@ const CartPage = () => {
 
             const { url_pago, preference_id, pedido_id } = data;
 
-            if (data.url_pago) {
+            if (url_pago) {
                 // --- LOG DE COMPRA (Instrucción 2026-01-06) ---
                 console.log(`[LOG] Pago Iniciado. Pedido: #${pedido_id} | Pref: ${preference_id}`);
                 toast.success("Redirigiendo a Mercado Pago...");
 
                 // 3. REDIRECCIÓN DIRECTA
-                window.location.href = data.url_pago;
+                window.location.href = url_pago;
             }
         } catch (error: any) {
             console.error("Error en checkout:", error.response?.data || error.message);
