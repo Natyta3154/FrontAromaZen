@@ -23,13 +23,14 @@ export const apiAuth = axios.create({
 
 // apiBlog.ts
 export const apiBlog = axios.create({
- baseURL: `${BASE_URL}blog/`,
+  baseURL: `${BASE_URL.replace(/\/$/, "")}/blog/`,
 })
 
 
 // CSRF (solo si usás sesión/cookies)
 api.defaults.xsrfCookieName = "csrftoken";
 api.defaults.xsrfHeaderName = "X-CSRFToken";
+// Solo para apiAuth que maneja sesión
 apiAuth.defaults.xsrfCookieName = "csrftoken";
 apiAuth.defaults.xsrfHeaderName = "X-CSRFToken";
 

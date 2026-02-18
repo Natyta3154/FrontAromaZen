@@ -9,7 +9,9 @@ export const loginRequest = async (email: string, pass: string) => {
 
 export const logoutRequest = async () => {
     // Agregamos 'usuarios/' antes de logout
-    return await apiAuth.get('usuarios/logout/', { withCredentials: true });
+    return await apiAuth.post('usuarios/logout/', { 
+        //withCredentials: true 
+    });
 };
 
 export const checkSessionRequest = async () => {
