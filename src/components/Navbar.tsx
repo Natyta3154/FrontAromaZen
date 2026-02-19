@@ -181,29 +181,44 @@ const Navbar = () => {
               </Link>
             ))}
             <div className="pt-4 border-t border-brand-sand/50 space-y-2">
-              {user ? (
-                <>
-                  {/* ✨ NOMBRE DEL USUARIO ✨ */}
-                  <div className="px-4 py-3 mb-2">
-                    <p className="text-xs text-brand-gold font-bold uppercase tracking-widest">Bienvenido</p>
-                    <p className="text-xl font-serif text-brand-stone capitalize">
-                      {user.username || 'Explorador Zen'}
-                    </p>
-                  </div>
+  {user ? (
+    <>
+      {/* Saludo Alineado con los botones */}
+      <div className="flex flex-col items-center py-4 mb-2 bg-brand-sand/10 rounded-2xl border border-brand-sand/20">
+        <span className="text-[10px] text-brand-gold font-bold uppercase tracking-[0.3em] mb-1">
+          Sesión Activa
+        </span>
+        <p className="text-xl font-serif text-brand-stone capitalize">
+          {user.username}
+        </p>
+      </div>
 
-                  <Link to="/perfil" onClick={() => setIsOpen(false)} className="flex items-center justify-center py-3 bg-brand-sand/30 text-brand-stone rounded-xl font-bold italic">
-                    Mi Perfil
-                  </Link>
-                  <button onClick={() => { logout(); setIsOpen(false); }} className="w-full py-3 bg-red-50 text-red-500 rounded-xl font-bold">
-                    Cerrar Sesión
-                  </button>
-                </>
-              ) : (
-                <Link to="/login" onClick={() => setIsOpen(false)} className="flex items-center justify-center py-3 bg-brand-gold text-white rounded-xl font-bold uppercase tracking-wider">
-                  Entrar
-                </Link>
-              )}
-            </div>
+      {/* Botones */}
+      <Link 
+        to="/perfil" 
+        onClick={() => setIsOpen(false)} 
+        className="flex items-center justify-center py-4 bg-brand-sand/30 text-brand-stone rounded-xl font-bold italic transition-active active:scale-95"
+      >
+        Mi Perfil
+      </Link>
+      
+      <button 
+        onClick={() => { logout(); setIsOpen(false); }} 
+        className="w-full py-4 bg-red-50 text-red-500 rounded-xl font-bold transition-active active:scale-95"
+      >
+        Cerrar Sesión
+      </button>
+    </>
+  ) : (
+    <Link 
+      to="/login" 
+      onClick={() => setIsOpen(false)} 
+      className="flex items-center justify-center py-4 bg-brand-gold text-white rounded-xl font-bold uppercase tracking-wider"
+    >
+      Entrar
+    </Link>
+  )}
+</div>
           </div>
         </div>
       </nav>
